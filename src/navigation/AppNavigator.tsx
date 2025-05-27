@@ -11,24 +11,14 @@ import HomeScreen from '../screens/HomeScreen';
 const Stack = createStackNavigator();
 
 const AppNavigator: React.FC = () => {
-  const isOnboardingCompleted = useSelector(
-    (state: RootState) => state.onboarding.isCompleted
-  );
-
+  // Test modu için onboarding kontrolünü kaldırdık
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!isOnboardingCompleted ? (
-          <Stack.Screen 
-            name="Onboarding" 
-            component={OnboardingNavigator} 
-          />
-        ) : (
-          <Stack.Screen 
-            name="Home" 
-            component={HomeScreen} 
-          />
-        )}
+        <Stack.Screen 
+          name="Onboarding" 
+          component={OnboardingNavigator} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

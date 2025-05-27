@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from '../../components/Button';
 
 const StepsScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -43,9 +44,10 @@ const StepsScreen: React.FC = () => {
         ))}
       </ScrollView>
       
-      <TouchableOpacity style={styles.button} onPress={handleNext}>
-        <Text style={styles.buttonText}>Devam Et</Text>
-      </TouchableOpacity>
+      <Button
+        title="Devam Et"
+        onPress={handleNext}
+      />
     </View>
   );
 };
@@ -89,20 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
     lineHeight: 20,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
+  }
 });
 
 export default StepsScreen; 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ViewStyle, TextStyle } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setOnboardingCompleted } from '../../store/slices/onboardingSlice';
+import { Button } from '../../components/Button';
 
 const PaymentScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,70 +39,87 @@ const PaymentScreen: React.FC = () => {
     }
   ];
 
+  const getButtonStyle = (plan: typeof plans[0]): ViewStyle => {
+    const styles: ViewStyle[] = [baseStyles.selectButton];
+    if (plan.recommended) {
+      styles.push(baseStyles.recommendedButton);
+    }
+    return Object.assign({}, ...styles);
+  };
+
+  const getTextStyle = (plan: typeof plans[0]): TextStyle => {
+    const styles: TextStyle[] = [baseStyles.selectButtonText];
+    if (plan.recommended) {
+      styles.push(baseStyles.recommendedButtonText);
+    }
+    return Object.assign({}, ...styles);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-          <Text style={styles.closeButtonText}>✕</Text>
+    <View style={baseStyles.container}>
+      <View style={baseStyles.header}>
+        <TouchableOpacity style={baseStyles.closeButton} onPress={handleClose}>
+          <Text style={baseStyles.closeButtonText}>✕</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>Premium Özellikler</Text>
-        <Text style={styles.subtitle}>Size en uygun planı seçin</Text>
+        <Text style={baseStyles.title}>Premium Özellikler</Text>
+        <Text style={baseStyles.subtitle}>Size en uygun planı seçin</Text>
       </View>
       
-      <ScrollView style={styles.plansContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView style={baseStyles.plansContainer} showsVerticalScrollIndicator={false}>
         {plans.map((plan, index) => (
           <View key={index} style={[
-            styles.planCard,
-            plan.recommended && styles.recommendedCard
+            baseStyles.planCard,
+            plan.recommended && baseStyles.recommendedCard
           ]}>
             {plan.recommended && (
-              <View style={styles.recommendedBadge}>
-                <Text style={styles.recommendedText}>ÖNERİLEN</Text>
+              <View style={baseStyles.recommendedBadge}>
+                <Text style={baseStyles.recommendedText}>ÖNERİLEN</Text>
               </View>
             )}
             
-            <View style={styles.planHeader}>
-              <Text style={styles.planName}>{plan.name}</Text>
-              <View style={styles.priceContainer}>
-                <Text style={styles.price}>{plan.price}</Text>
-                <Text style={styles.period}>{plan.period}</Text>
+            <View style={baseStyles.planHeader}>
+              <Text style={baseStyles.planName}>{plan.name}</Text>
+              <View style={baseStyles.priceContainer}>
+                <Text style={baseStyles.price}>{plan.price}</Text>
+                <Text style={baseStyles.period}>{plan.period}</Text>
               </View>
             </View>
             
-            <View style={styles.featuresContainer}>
+            <View style={baseStyles.featuresContainer}>
               {plan.features.map((feature, featureIndex) => (
-                <View key={featureIndex} style={styles.featureRow}>
-                  <Text style={styles.checkmark}>✓</Text>
-                  <Text style={styles.featureText}>{feature}</Text>
+                <View key={featureIndex} style={baseStyles.featureRow}>
+                  <Text style={baseStyles.checkmark}>✓</Text>
+                  <Text style={baseStyles.featureText}>{feature}</Text>
                 </View>
               ))}
             </View>
             
-            <TouchableOpacity style={[
-              styles.selectButton,
-              plan.recommended && styles.recommendedButton
-            ]}>
-              <Text style={[
-                styles.selectButtonText,
-                plan.recommended && styles.recommendedButtonText
-              ]}>
-                {plan.recommended ? 'Başlat' : 'Seç'}
-              </Text>
-            </TouchableOpacity>
+            <Button
+              title={plan.recommended ? 'Başlat' : 'Seç'}
+              onPress={handleClose}
+              style={getButtonStyle(plan)}
+              textStyle={getTextStyle(plan)}
+            />
           </View>
         ))}
       </ScrollView>
       
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.skipButton} onPress={handleClose}>
-          <Text style={styles.skipButtonText}>Şimdilik Geç</Text>
+      <View style={baseStyles.footer}>
+        <View style={baseStyles.legal}>
+          <Text style={baseStyles.legalText}>
+            By tapping next, you are agreeing to PlantID{'\n'}
+            Terms of Use & Privacy Policy.
+          </Text>
+        </View>
+        <TouchableOpacity style={baseStyles.skipButton} onPress={handleClose}>
+          <Text style={baseStyles.skipButtonText}>Şimdilik Geç</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -217,16 +235,11 @@ const styles = StyleSheet.create({
   },
   selectButton: {
     backgroundColor: '#E0E0E0',
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
   },
   recommendedButton: {
     backgroundColor: '#007AFF',
   },
   selectButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
     color: '#666666',
   },
   recommendedButtonText: {
@@ -235,6 +248,18 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: 20,
     paddingBottom: 40,
+  },
+  legal: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  legalText: {
+    fontFamily: 'Rubik',
+    fontSize: 11,
+    lineHeight: 15,
+    letterSpacing: 0.07,
+    textAlign: 'center',
+    color: 'rgba(89, 113, 101, 0.7)',
   },
   skipButton: {
     paddingVertical: 16,
