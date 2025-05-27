@@ -25,7 +25,7 @@ const WelcomeScreen: React.FC = () => {
               Welcome to <Text style={styles.boldText}>PlantApp</Text>
             </Text>
             <Text style={styles.subtitle}>
-              Identify more than 3000+ plants and 88% accuracy.
+              Identify more than 3000+ plants and {'\n'}88% accuracy.
             </Text>
           </View>
           

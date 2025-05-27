@@ -22,7 +22,7 @@ const FeatureScreen: React.FC = () => {
         <View style={styles.topContentContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>
-              Take a photo to identify {'\n'}the plant!
+              Take a photo to <Text style={styles.boldIdentifyText}>identify</Text> {'\n'}the plant!
             </Text>
             <Image 
               source={require('../../../assets/figma/Group_2_1_569.png')}
@@ -39,13 +39,17 @@ const FeatureScreen: React.FC = () => {
             resizeMode="contain" 
           />
           <Image 
+            source={require('../../../assets/figma/Plant_1_561.png')}
+            style={styles.plantImage}
+            resizeMode="contain"
+          />
+          <Image 
             source={require('../../../assets/figma/Phone_1_562.png')}
             style={styles.mainImage}
             resizeMode="contain"
           />
-    
           <Image 
-            source={require('../../../assets/figma/cameraline.png')}
+            source={require('../../../assets/figma/Scan_1_563.png')}
             style={styles.scanImage}
             resizeMode="contain"
           />
@@ -86,6 +90,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     width: 315,
+    position: 'relative',
+    height: 66,
   },
   titleText: {
     fontFamily: 'Rubik-Medium',
@@ -95,41 +101,59 @@ const styles = StyleSheet.create({
     color: '#13231B',
     textAlign: 'left',
   },
+  boldIdentifyText: {
+    fontWeight: '900',
+    fontFamily: 'Rubik-Black',
+    letterSpacing: -0.5,
+  },
   brushImage: {
     width: 136,
-    height: 13,
-    marginTop: 8,
+    height: 30,
+    position: 'absolute',
+    left: 143,
+    top: 20,
   },
   imageContentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    marginTop: 20,
+    width: 375,
+    height: 530,
+    marginTop: 0,
     marginBottom: 20,
   },
   mainImage: {
     width: 375,
     height: 523,
     position: 'absolute',
+    left: 0,
+    top: -13,
+    transform: [{ scale: 1.10 }],
   },
   plantImage: {
     width: 375,
     height: 361,
     position: 'absolute',
-    top: (523 - 361) / 2 - 50,
+    left: -20,
+    top: -20,
+    transform: [{ scale: 1.15 }],
   },
   scanImage: {
     width: 375,
     height: 384,
     position: 'absolute',
-    top: (523 - 384) / 2 - 30,
+    left: 0,
+    top: 22,
+    transform: [{ scale: 1.10 }],
   },
   shadowImage: {
     width: 214,
     height: 12,
     position: 'absolute',
-    bottom: 50,
+    left: 80,
+    top: 451,
+    transform: [{ scale: 1.10 }],
   },
   bottomContainer: {
     paddingHorizontal: 24,
@@ -141,6 +165,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 32,
+    marginTop: 10,
+    top: 20,
   },
   sliderDot: {
     width: 6,
