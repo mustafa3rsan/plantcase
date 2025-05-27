@@ -9,7 +9,7 @@ const WelcomeScreen: React.FC = () => {
   const navigation = useNavigation();
 
   const handleNext = () => {
-    navigation.navigate('Steps' as never);
+    navigation.navigate('Feature' as never);
   };
 
   return (

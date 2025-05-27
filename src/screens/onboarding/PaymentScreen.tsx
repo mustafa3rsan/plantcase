@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ViewStyle, TextStyle } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ViewStyle, TextStyle, SafeAreaView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setOnboardingCompleted } from '../../store/slices/onboardingSlice';
 import { Button } from '../../components/Button';
@@ -56,55 +56,57 @@ const PaymentScreen: React.FC = () => {
   };
 
   return (
-    <View style={baseStyles.container}>
-      <View style={baseStyles.header}>
-        <TouchableOpacity style={baseStyles.closeButton} onPress={handleClose}>
-          <Text style={baseStyles.closeButtonText}>✕</Text>
-        </TouchableOpacity>
-        <Text style={baseStyles.title}>Premium Özellikler</Text>
-        <Text style={baseStyles.subtitle}>Size en uygun planı seçin</Text>
+    <SafeAreaView style={baseStyles.container}>
+      <View style={baseStyles.content}>
+        <View style={baseStyles.header}>
+          <TouchableOpacity style={baseStyles.closeButton} onPress={handleClose}>
+            <Text style={baseStyles.closeButtonText}>✕</Text>
+          </TouchableOpacity>
+          <Text style={baseStyles.title}>Premium Özellikler</Text>
+          <Text style={baseStyles.subtitle}>Size en uygun planı seçin</Text>
+        </View>
+        
+        <ScrollView style={baseStyles.plansContainer} showsVerticalScrollIndicator={false}>
+          {plans.map((plan, index) => (
+            <View key={index} style={[
+              baseStyles.planCard,
+              plan.recommended && baseStyles.recommendedCard
+            ]}>
+              {plan.recommended && (
+                <View style={baseStyles.recommendedBadge}>
+                  <Text style={baseStyles.recommendedText}>ÖNERİLEN</Text>
+                </View>
+              )}
+              
+              <View style={baseStyles.planHeader}>
+                <Text style={baseStyles.planName}>{plan.name}</Text>
+                <View style={baseStyles.priceContainer}>
+                  <Text style={baseStyles.price}>{plan.price}</Text>
+                  <Text style={baseStyles.period}>{plan.period}</Text>
+                </View>
+              </View>
+              
+              <View style={baseStyles.featuresContainer}>
+                {plan.features.map((feature, featureIndex) => (
+                  <View key={featureIndex} style={baseStyles.featureRow}>
+                    <Text style={baseStyles.checkmark}>✓</Text>
+                    <Text style={baseStyles.featureText}>{feature}</Text>
+                  </View>
+                ))}
+              </View>
+              
+              <Button
+                title={plan.recommended ? 'Başlat' : 'Seç'}
+                onPress={handleClose}
+                style={getButtonStyle(plan)}
+                textStyle={getTextStyle(plan)}
+              />
+            </View>
+          ))}
+        </ScrollView>
       </View>
       
-      <ScrollView style={baseStyles.plansContainer} showsVerticalScrollIndicator={false}>
-        {plans.map((plan, index) => (
-          <View key={index} style={[
-            baseStyles.planCard,
-            plan.recommended && baseStyles.recommendedCard
-          ]}>
-            {plan.recommended && (
-              <View style={baseStyles.recommendedBadge}>
-                <Text style={baseStyles.recommendedText}>ÖNERİLEN</Text>
-              </View>
-            )}
-            
-            <View style={baseStyles.planHeader}>
-              <Text style={baseStyles.planName}>{plan.name}</Text>
-              <View style={baseStyles.priceContainer}>
-                <Text style={baseStyles.price}>{plan.price}</Text>
-                <Text style={baseStyles.period}>{plan.period}</Text>
-              </View>
-            </View>
-            
-            <View style={baseStyles.featuresContainer}>
-              {plan.features.map((feature, featureIndex) => (
-                <View key={featureIndex} style={baseStyles.featureRow}>
-                  <Text style={baseStyles.checkmark}>✓</Text>
-                  <Text style={baseStyles.featureText}>{feature}</Text>
-                </View>
-              ))}
-            </View>
-            
-            <Button
-              title={plan.recommended ? 'Başlat' : 'Seç'}
-              onPress={handleClose}
-              style={getButtonStyle(plan)}
-              textStyle={getTextStyle(plan)}
-            />
-          </View>
-        ))}
-      </ScrollView>
-      
-      <View style={baseStyles.footer}>
+      <View style={baseStyles.bottomContainer}>
         <View style={baseStyles.legal}>
           <Text style={baseStyles.legalText}>
             By tapping next, you are agreeing to PlantID{'\n'}
@@ -115,7 +117,7 @@ const PaymentScreen: React.FC = () => {
           <Text style={baseStyles.skipButtonText}>Şimdilik Geç</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -124,15 +126,18 @@ const baseStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  content: {
+    flex: 1,
+  },
   header: {
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 30,
     paddingBottom: 20,
     position: 'relative',
   },
   closeButton: {
     position: 'absolute',
-    top: 60,
+    top: 30,
     right: 20,
     width: 32,
     height: 32,
@@ -245,9 +250,10 @@ const baseStyles = StyleSheet.create({
   recommendedButtonText: {
     color: '#FFFFFF',
   },
-  footer: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
+  bottomContainer: {
+    marginBottom: 40,
+    width: '100%',
+    paddingHorizontal: 24,
   },
   legal: {
     alignItems: 'center',

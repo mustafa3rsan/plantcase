@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '../../components/Button';
 
@@ -30,25 +30,30 @@ const StepsScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Plant Case ile Neler Yapabilirsiniz?</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Plant Case ile Neler Yapabilirsiniz?</Text>
+        </View>
+        
+        <ScrollView style={styles.stepsContainer} showsVerticalScrollIndicator={false}>
+          {steps.map((step, index) => (
+            <View key={index} style={styles.stepItem}>
+              <Text style={styles.stepTitle}>{step.title}</Text>
+              <Text style={styles.stepDescription}>{step.description}</Text>
+            </View>
+          ))}
+        </ScrollView>
       </View>
       
-      <ScrollView style={styles.stepsContainer} showsVerticalScrollIndicator={false}>
-        {steps.map((step, index) => (
-          <View key={index} style={styles.stepItem}>
-            <Text style={styles.stepTitle}>{step.title}</Text>
-            <Text style={styles.stepDescription}>{step.description}</Text>
-          </View>
-        ))}
-      </ScrollView>
-      
-      <Button
-        title="Devam Et"
-        onPress={handleNext}
-      />
-    </View>
+      <View style={styles.bottomContainer}>
+        <Button
+          title="Devam Et"
+          onPress={handleNext}
+          style={styles.button}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -56,8 +61,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  content: {
+    flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 30,
   },
   header: {
     marginBottom: 30,
@@ -71,7 +79,6 @@ const styles = StyleSheet.create({
   },
   stepsContainer: {
     flex: 1,
-    marginBottom: 20,
   },
   stepItem: {
     backgroundColor: '#F8F9FA',
@@ -91,6 +98,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
     lineHeight: 20,
+  },
+  bottomContainer: {
+    marginBottom: 40,
+    width: '100%',
+    paddingHorizontal: 24,
+  },
+  button: {
+    backgroundColor: '#28AF6E',
+    borderRadius: 12,
+    height: 56,
   }
 });
 
