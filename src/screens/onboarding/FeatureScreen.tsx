@@ -9,7 +9,7 @@ const FeatureScreen: React.FC = () => {
   const navigation = useNavigation();
 
   const handleNext = () => {
-    navigation.navigate('NextScreen' as never);
+    navigation.navigate('Steps' as never);
   };
 
   return (

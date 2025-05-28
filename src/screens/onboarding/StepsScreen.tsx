@@ -1,114 +1,92 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from '../../components/Button';
 
 const StepsScreen: React.FC = () => {
   const navigation = useNavigation();
 
-  const steps = [
-    {
-      title: '🌱 Bitkilerinizi Keşfedin',
-      description: 'Geniş bitki koleksiyonumuzdan size uygun olanları bulun'
-    },
-    {
-      title: '📱 Kolay Takip',
-      description: 'Bitkilerinizin bakım zamanlarını takip edin'
-    },
-    {
-      title: '💡 Uzman Tavsiyeleri',
-      description: 'Bitkileriniz için özel bakım tavsiyeleri alın'
-    },
-    {
-      title: '📈 İlerleme Takibi',
-      description: 'Bitkilerinizin büyüme sürecini kaydedin'
-    }
-  ];
-
   const handleNext = () => {
     navigation.navigate('Payment' as never);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Plant Case ile Neler Yapabilirsiniz?</Text>
+    <ImageBackground 
+      source={require('../../../assets/Background.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.content}>
+          {/* İçerik buraya gelecek, şimdilik boş */}
         </View>
         
-        <ScrollView style={styles.stepsContainer} showsVerticalScrollIndicator={false}>
-          {steps.map((step, index) => (
-            <View key={index} style={styles.stepItem}>
-              <Text style={styles.stepTitle}>{step.title}</Text>
-              <Text style={styles.stepDescription}>{step.description}</Text>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-      
-      <View style={styles.bottomContainer}>
-        <Button
-          title="Devam Et"
-          onPress={handleNext}
-          style={styles.button}
-        />
-      </View>
-    </SafeAreaView>
+        <View style={styles.bottomContainer}>
+          <Button
+            title="Devam Et"
+            onPress={handleNext}
+            style={styles.button}
+          />
+          <View style={styles.sliderContainer}>
+            <View style={[styles.sliderDot, styles.sliderDotInactive]} />
+            <View style={[styles.sliderDot, styles.sliderDotActive]} />
+            <View style={[styles.sliderDot, styles.sliderDotInactive]} />
+          </View>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FDFFFE', // FeatureScreen'den alındı
+  },
+  safeArea: {
+    flex: 1,
+    justifyContent: 'space-between', // Buton ve slider'ı aşağıda tutmak için
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 30,
-  },
-  header: {
-    marginBottom: 30,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333333',
-    textAlign: 'center',
-    lineHeight: 30,
-  },
-  stepsContainer: {
-    flex: 1,
-  },
-  stepItem: {
-    backgroundColor: '#F8F9FA',
-    padding: 20,
-    marginBottom: 16,
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#007AFF',
-  },
-  stepTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333333',
-    marginBottom: 8,
-  },
-  stepDescription: {
-    fontSize: 14,
-    color: '#666666',
-    lineHeight: 20,
+    // Bu kısım şimdilik boş, gerekirse stil eklenebilir
   },
   bottomContainer: {
-    marginBottom: 40,
-    width: '100%',
     paddingHorizontal: 24,
+    paddingBottom: 34,
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#28AF6E',
     borderRadius: 12,
     height: 56,
-  }
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sliderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 32,
+    marginTop: 10,
+    top: 20,
+  },
+  sliderDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginHorizontal: 4,
+  },
+  sliderDotActive: {
+    backgroundColor: '#13231B',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  sliderDotInactive: {
+    backgroundColor: 'rgba(19, 35, 27, 0.25)',
+  },
 });
 
 export default StepsScreen; 
