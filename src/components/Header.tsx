@@ -8,12 +8,11 @@ import { View, Text, StyleSheet, TextInput, ImageBackground } from 'react-native
 const Header: React.FC = () => {
   return (
     <ImageBackground 
-      source={require('../../assets/figma/maskgroup.png')} // Resim yolunu varsayılan olarak ayarladım
+      source={require('../../assets/figma/maskgroup.png')}
       style={styles.backgroundImage}
-      imageStyle={styles.imageStyle} // Arka plan resminin stilini ayarlamak için
+      imageStyle={styles.imageStyle}
     >
       <View style={styles.container}>
-        {/* StatusBar kaldırıldı */}
         <View style={styles.titleContainer}>
           <Text style={styles.greetingText}>Hi, plant lover!</Text>
           <Text style={styles.subGreetingText}>Good Afternoon! ⛅</Text>
@@ -21,10 +20,9 @@ const Header: React.FC = () => {
         <View style={styles.searchBarContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder={'\uD83D\uDD0D Search for plants'} // Büyüteç ikonu eklendi
+            placeholder={'\uD83D\uDD0D Search for plants'}
             placeholderTextColor="#AFAFAF"
           />
-          {/* Arama ikonu buraya eklenecek */}
         </View>
       </View>
     </ImageBackground>
@@ -33,62 +31,46 @@ const Header: React.FC = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    width: '100%', // Genişliği doldurması için
-    // Yükseklik Figma verisine göre ayarlanabilir veya içerik kadar olabilir.
-    // Örneğin: height: 175, // Figma'daki Header (GROUP 3:7284) yüksekliği
+    width: '100%',
   },
   imageStyle: {
-    // resizeMode: 'cover', // veya 'contain', 'stretch' vs. ihtiyaca göre
-    // opacity: 0.5, // Eğer resmin saydamlığı ayarlanacaksa
   },
   container: {
-    backgroundColor: 'transparent', // Arka plan resmi görüneceği için container backgroundColor transparan olmalı
-    paddingTop: 40, // Status bar kaldırıldığı için paddingTop eklendi (yaklaşık bir değer)
-    // Diğer stiller Figma verilerine göre eklenecek.
-    // Örneğin yükseklik, paddingler vs.
-    // effect_XUELWX (backdropFilter: blur(45px)) -> React Native'de doğrudan desteklenmiyor, alternatif kütüphaneler gerekebilir.
-    paddingBottom: 20, // Arama çubuğu ile alt kenar arasında boşluk bırakmak için
+    backgroundColor: 'transparent',
+    paddingTop: 40,
+    paddingBottom: 20,
   },
-  // statusBar stili kaldırıldı
-  // timeText stili kaldırıldı
-  titleContainer: { // I3:7285;268:8344 (Titles)
-    paddingHorizontal: 24, // layout_QY0E42 x
-    marginTop: 20, // 50 (Titles y) - 47 (Status Bar height) = 3. Yaklaşık bir değer.
+  titleContainer: {
+    paddingHorizontal: 24,
+    marginTop: 20,
   },
-  greetingText: { // I3:7285;268:8345 (Hi, Micheal -> Hi, plant lover!)
-    fontFamily: 'Rubik', // style_HG5EUF
-    fontWeight: '400', // style_HG5EUF
-    fontSize: 16, // style_HG5EUF
-    color: '#13231B', // fill_8NIVA8
-    // letterSpacing: '0.43750000186264515%',
-    marginBottom: 6, // layout_QY0E42 gap
+  greetingText: {
+    fontFamily: 'Rubik',
+    fontWeight: '400',
+    fontSize: 16,
+    color: '#13231B',
+    marginBottom: 6,
   },
-  subGreetingText: { // I3:7285;268:8346 (Good Afternoon! ⛅)
-    fontFamily: 'Rubik', // style_MEDBNE
-    fontWeight: '500', // style_MEDBNE
-    fontSize: 24, // style_MEDBNE
-    color: '#13231B', // fill_8NIVA8
-    // letterSpacing: '1.4583333084980645%',
+  subGreetingText: {
+    fontFamily: 'Rubik',
+    fontWeight: '500',
+    fontSize: 24,
+    color: '#13231B',
   },
-  searchBarContainer: { // I3:7285;268:8350 (Search Bar)
-    marginTop: 14, // 117 (Search Bar y) - (50 + ~50 (Titles container height)) = ~17. Yaklaşık. Figma'daki layout_TU754U y: 117
-    paddingHorizontal: 24, // layout_TU754U x
-    // height: 44, // layout_TU754U
+  searchBarContainer: {
+    marginTop: 14,
+    paddingHorizontal: 24,
   },
-  searchInput: { // I3:7285;268:8351 (Background of Search Bar) & I3:7285;268:8353 (Search for plants text)
-    backgroundColor: '#FFFFFF', // Tamamen opak beyaz arka plan
-    borderRadius: 12, // layout_B7ETNJ
-    height: 44, // layout_B7ETNJ
-    paddingHorizontal: 16, // Figma'daki Text Group (icon + placeholder) x:16 pozisyonuna göre ayarlandı
-    fontSize: 15.5, // style_ZAGT6B
-    fontFamily: 'Rubik', // style_ZAGT6B
-    fontWeight: '400', // style_ZAGT6B
-    color: '#130F26', // placeholderTextColor #AFAFAF, asıl text rengi Figma'da belirtilmemiş, ana metin rengi kullanılabilir.
-    // borderColor: 'rgba(60, 60, 67, 0.25)', // stroke_9J6RJY
-    // borderWidth: 0.2, // stroke_9J6RJY
-    // effect_ED7GNB (backdropFilter: blur(5px))
+  searchInput: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    height: 44,
+    paddingHorizontal: 16,
+    fontSize: 15.5,
+    fontFamily: 'Rubik',
+    fontWeight: '400',
+    color: '#130F26',
   },
-  // Diğer ikonlar ve detaylar için ek stiller eklenebilir.
 });
 
 export default Header; 

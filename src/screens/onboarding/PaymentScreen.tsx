@@ -95,7 +95,6 @@ const PaymentScreen: React.FC = () => {
             </ScrollView>
             
             <View style={styles.plansContainer}>
-              {/* Yearly Plan */}
               <TouchableOpacity 
                 style={[
                   styles.planCard, 
@@ -122,7 +121,6 @@ const PaymentScreen: React.FC = () => {
                 </View>
               </TouchableOpacity>
 
-              {/* Monthly Plan */}
               <TouchableOpacity 
                 style={[
                   styles.planCard, 

@@ -12,18 +12,16 @@ const HomeScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {
-    // API'den veri çekme işlemi
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
       dispatch(setLoading(true));
-      // TODO: Gerçek API endpoint'i buraya eklenecek
+      // Gerçek API endpoint'i buraya eklenecek
       // const response = await fetch('YOUR_API_ENDPOINT');
       // const data = await response.json();
       
-      // Geçici mock data
       setTimeout(() => {
         dispatch(setData({
           message: 'Ana ekrana hoş geldiniz!',
@@ -36,7 +34,6 @@ const HomeScreen: React.FC = () => {
   };
 
   const handleTabPress = (tab: string) => {
-    // Şu an için sadece state güncelle, işlevsel değil
     setActiveTab(tab);
   };
 
