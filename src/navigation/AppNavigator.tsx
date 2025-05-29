@@ -19,6 +19,10 @@ const AppNavigator: React.FC = () => {
           name="Onboarding" 
           component={OnboardingNavigator} 
         />
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

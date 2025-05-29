@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image, ImageBackground, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setOnboardingCompleted } from '../../store/slices/onboardingSlice';
+import { useNavigation } from '@react-navigation/native';
 
 const { height: screenHeight } = Dimensions.get('window');
 
 const PaymentScreen: React.FC = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [selectedPlan, setSelectedPlan] = useState<'yearly' | 'monthly'>('yearly');
 
   const handlePlanSelect = (plan: 'yearly' | 'monthly') => {
@@ -17,6 +19,10 @@ const PaymentScreen: React.FC = () => {
     dispatch(setOnboardingCompleted());
   };
 
+  const handleClose = () => {
+    navigation.navigate('Home' as never);
+  };
+
   return (
     <View style={styles.backgroundContainer}>
       <ImageBackground 
@@ -25,6 +31,11 @@ const PaymentScreen: React.FC = () => {
         resizeMode="cover"
       />
       <SafeAreaView style={styles.container}>
+        <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+          <View style={styles.closeBackground}>
+            <Text style={styles.closeIcon}>✕</Text>
+          </View>
+        </TouchableOpacity>
         <View style={styles.content}>
           <View style={styles.bottomSection}>
             <View style={styles.titleContainer}>
@@ -158,7 +169,7 @@ const PaymentScreen: React.FC = () => {
 const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#101E17',
   },
   backgroundImage: {
     position: 'absolute',
@@ -347,6 +358,32 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     tintColor: '#FFFFFF',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 10,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeBackground: {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeIcon: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    lineHeight: 18,
+    letterSpacing: -0.08,
   },
 });
 
