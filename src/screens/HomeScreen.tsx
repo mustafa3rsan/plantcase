@@ -6,19 +6,25 @@ import {
   setQuestionsLoading,
   setQuestions,
   setQuestionsError,
-  Question
+  Question,
+  setCategoriesLoading,
+  setCategories,
+  setCategoriesError,
+  Category
 } from '../store/slices/apiSlice';
 import TabBar from '../components/TabBar';
 import Header from '../components/Header';
 import QuestionsCard from '../components/QuestionsCard';
+import CategoryCard from '../components/CategoryCard';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
-  const { questions, questionsLoading, questionsError } = useSelector((state: RootState) => state.api);
+  const { questions, questionsLoading, questionsError, categories, categoriesLoading, categoriesError } = useSelector((state: RootState) => state.api);
   const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {
     fetchQuestionsData();
+    fetchCategoriesData();
   }, [dispatch]);
 
   const fetchQuestionsData = async () => {
@@ -35,11 +41,26 @@ const HomeScreen: React.FC = () => {
     }
   };
 
+  const fetchCategoriesData = async () => {
+    try {
+      dispatch(setCategoriesLoading(true));
+      const response = await fetch('https://dummy-api-jtg6bessta-ey.a.run.app/getCategories');
+      if (!response.ok) {
+        throw new Error('API yanıtı başarılı değil: ' + response.status);
+      }
+      const responseData = await response.json();
+      const categoriesData: Category[] = responseData.data;
+      dispatch(setCategories(categoriesData));
+    } catch (error: any) {
+      dispatch(setCategoriesError(error.message || 'Kategori verileri yüklenirken bir hata oluştu'));
+    }
+  };
+
   const handleTabPress = (tab: string) => {
     setActiveTab(tab);
   };
 
-  if (questionsLoading && !questions) {
+  if (questionsLoading && !questions && !categories) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
@@ -56,53 +77,93 @@ const HomeScreen: React.FC = () => {
     );
   }
 
+  const renderListHeader = () => (
+    <>
+      <View style={styles.premiumBox}>
+        <View style={styles.premiumBoxIconContainer}>
+          <Image source={require('../../assets/icons/Icon.png')} style={styles.premiumBoxIcon} />
+        </View>
+        <View style={styles.premiumBoxTextContainer}>
+          <Text style={styles.premiumBoxTitle}>FREE Premium Available</Text>
+          <Text style={styles.premiumBoxSubtitle}>Tap to upgrade your account!</Text>
+        </View>
+        <View style={styles.premiumBoxArrowContainer}>
+          <Image source={require('../../assets/icons/Layer 2.png')} style={styles.premiumBoxArrowIcon} />
+        </View>
+      </View>
+
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Get Started</Text>
+        {questionsLoading && questions && (
+          <View style={styles.centerContainerSmall}>
+            <ActivityIndicator size="small" color="#007AFF" />
+          </View>
+        )}
+        {questionsError && questions && (
+          <View style={styles.centerContainerSmall}>
+            <Text style={styles.errorTextSmall}>{questionsError}</Text>
+          </View>
+        )}
+        {questions && questions.length > 0 && (
+          <FlatList
+            horizontal
+            data={questions}
+            renderItem={({ item }) => (
+              <QuestionsCard title={item.title} image_uri={item.image_uri} />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.questionsList}
+          />
+        )}
+        {questions && questions.length === 0 && !questionsLoading && !questionsError && (
+          <Text style={styles.noDataText}>Gösterilecek soru bulunamadı.</Text>
+        )}
+      </View>
+
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Categories</Text>
+      </View>
+    </>
+  );
+
+  const renderListEmpty = () => {
+    if (categoriesLoading) {
+      return (
+        <View style={styles.centerContainerSmall}>
+          <ActivityIndicator size="small" color="#007AFF" />
+        </View>
+      );
+    }
+    if (categoriesError) {
+      return (
+        <View style={styles.centerContainerSmall}>
+          <Text style={styles.errorTextSmall}>{categoriesError}</Text>
+        </View>
+      );
+    }
+    if (categories && categories.length === 0) {
+      return <Text style={styles.noDataText}>Gösterilecek kategori bulunamadı.</Text>;
+    }
+    return null;
+  };
+
   return (
     <View style={styles.container}>
       <Header />
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.premiumBox}>
-          <View style={styles.premiumBoxIconContainer}>
-            <Image source={require('../../assets/icons/Icon.png')} style={styles.premiumBoxIcon} />
-          </View>
-          <View style={styles.premiumBoxTextContainer}>
-            <Text style={styles.premiumBoxTitle}>FREE Premium Available</Text>
-            <Text style={styles.premiumBoxSubtitle}>Tap to upgrade your account!</Text>
-          </View>
-          <View style={styles.premiumBoxArrowContainer}>
-            <Image source={require('../../assets/icons/Layer 2.png')} style={styles.premiumBoxArrowIcon} />
-          </View>
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Get Started</Text>
-          {questionsLoading && questions && (
-            <View style={styles.centerContainerSmall}>
-              <ActivityIndicator size="small" color="#007AFF" />
-            </View>
-          )}
-          {questionsError && (
-            <View style={styles.centerContainerSmall}>
-              <Text style={styles.errorTextSmall}>{questionsError}</Text>
-            </View>
-          )}
-          {questions && questions.length > 0 && (
-            <FlatList
-              horizontal
-              data={questions}
-              renderItem={({ item }) => (
-                <QuestionsCard title={item.title} image_uri={item.image_uri} />
-              )}
-              keyExtractor={(item) => item.id.toString()}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.questionsList}
-            />
-          )}
-          {questions && questions.length === 0 && !questionsLoading && !questionsError && (
-            <Text style={styles.noDataText}>Gösterilecek soru bulunamadı.</Text>
-          )}
-        </View>
-      </ScrollView>
-      
+      <FlatList
+        ListHeaderComponent={renderListHeader}
+        data={categories}
+        renderItem={({ item }) => (
+          <CategoryCard title={item.title} imageUrl={item.image.url} />
+        )}
+        keyExtractor={(item) => (item.id ? item.id.toString() : Math.random().toString())}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={styles.mainFlatListContent}
+        ListEmptyComponent={renderListEmpty}
+        showsVerticalScrollIndicator={false}
+      />
       <TabBar activeTab={activeTab} onTabPress={handleTabPress} />
     </View>
   );
@@ -113,10 +174,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
+  mainFlatListContent: {
+    paddingHorizontal: 12,
     paddingBottom: 120,
   },
   centerContainer: {
@@ -237,6 +296,10 @@ const styles = StyleSheet.create({
   },
   questionsList: {
     paddingHorizontal: 10,
+  },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   noDataText: {
     textAlign: 'center',
