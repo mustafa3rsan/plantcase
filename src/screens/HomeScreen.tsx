@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import { setLoading, setData, setError } from '../store/slices/apiSlice';
+import TabBar from '../components/TabBar';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state: RootState) => state.api);
+  const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {
     // API'den veri çekme işlemi
@@ -32,6 +34,11 @@ const HomeScreen: React.FC = () => {
     }
   };
 
+  const handleTabPress = (tab: string) => {
+    // Şu an için sadece state güncelle, işlevsel değil
+    setActiveTab(tab);
+  };
+
   if (loading) {
     return (
       <View style={styles.centerContainer}>
@@ -50,25 +57,29 @@ const HomeScreen: React.FC = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Ana Ekran</Text>
-        <Text style={styles.subtitle}>Onboarding tamamlandı!</Text>
-      </View>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Ana Ekran</Text>
+          <Text style={styles.subtitle}>Onboarding tamamlandı!</Text>
+        </View>
+        
+        <View style={styles.content}>
+          {data && (
+            <>
+              <Text style={styles.message}>{data.message}</Text>
+              {data.items && data.items.map((item: string, index: number) => (
+                <View key={index} style={styles.item}>
+                  <Text style={styles.itemText}>{item}</Text>
+                </View>
+              ))}
+            </>
+          )}
+        </View>
+      </ScrollView>
       
-      <View style={styles.content}>
-        {data && (
-          <>
-            <Text style={styles.message}>{data.message}</Text>
-            {data.items && data.items.map((item: string, index: number) => (
-              <View key={index} style={styles.item}>
-                <Text style={styles.itemText}>{item}</Text>
-              </View>
-            ))}
-          </>
-        )}
-      </View>
-    </ScrollView>
+      <TabBar activeTab={activeTab} onTabPress={handleTabPress} />
+    </View>
   );
 };
 
@@ -76,6 +87,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 120, // TabBar için alan bırak
   },
   centerContainer: {
     flex: 1,
