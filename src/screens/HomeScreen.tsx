@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image, FlatList, TouchableOpacity, Platform, SafeAreaView, StatusBar } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import {
@@ -10,17 +10,24 @@ import {
   setCategoriesLoading,
   setCategories,
   setCategoriesError,
-  Category
+  Category,
+  resetApi
 } from '../store/slices/apiSlice';
 import TabBar from '../components/TabBar';
 import Header from '../components/Header';
 import QuestionsCard from '../components/QuestionsCard';
 import CategoryCard from '../components/CategoryCard';
+import { useNavigation } from '@react-navigation/native';
+import { HomeScreenNavigationProp } from '../navigation/types';
+import { useFocusEffect } from '@react-navigation/native';
+import { AppDispatch } from '../store/store';
 
 const HomeScreen: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { questions, questionsLoading, questionsError, categories, categoriesLoading, categoriesError } = useSelector((state: RootState) => state.api);
   const [activeTab, setActiveTab] = useState('home');
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  const isOnboardingCompleted = useSelector((state: RootState) => state.onboarding.isCompleted);
 
   useEffect(() => {
     fetchQuestionsData();
@@ -79,18 +86,22 @@ const HomeScreen: React.FC = () => {
 
   const renderListHeader = () => (
     <>
-      <View style={styles.premiumBox}>
-        <View style={styles.premiumBoxIconContainer}>
-          <Image source={require('../../assets/icons/Icon.png')} style={styles.premiumBoxIcon} />
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('PremiumPaymentScreen', { cameFrom: 'HomeScreen' } as never);
+      }}>
+        <View style={styles.premiumBox}>
+          <View style={styles.premiumBoxIconContainer}>
+            <Image source={require('../../assets/icons/Icon.png')} style={styles.premiumBoxIcon} />
+          </View>
+          <View style={styles.premiumBoxTextContainer}>
+            <Text style={styles.premiumBoxTitle}>FREE Premium Available</Text>
+            <Text style={styles.premiumBoxSubtitle}>Tap to upgrade your account!</Text>
+          </View>
+          <View style={styles.premiumBoxArrowContainer}>
+            <Image source={require('../../assets/icons/Layer 2.png')} style={styles.premiumBoxArrowIcon} />
+          </View>
         </View>
-        <View style={styles.premiumBoxTextContainer}>
-          <Text style={styles.premiumBoxTitle}>FREE Premium Available</Text>
-          <Text style={styles.premiumBoxSubtitle}>Tap to upgrade your account!</Text>
-        </View>
-        <View style={styles.premiumBoxArrowContainer}>
-          <Image source={require('../../assets/icons/Layer 2.png')} style={styles.premiumBoxArrowIcon} />
-        </View>
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Get Started</Text>

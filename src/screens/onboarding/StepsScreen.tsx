@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, ImageBackground, Image, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../../components/Button';
+import { OnboardingStackParamList } from '../../navigation/types';
 
 const StepsScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<OnboardingStackParamList>>();
 
   const handleNext = () => {
-    navigation.navigate('Payment' as never);
+    navigation.navigate('Payment');
   };
 
   return (

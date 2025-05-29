@@ -2,25 +2,40 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image, ImageBackground, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setOnboardingCompleted } from '../../store/slices/onboardingSlice';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../../navigation/types';
 
 const { height: screenHeight } = Dimensions.get('window');
+
+type PaymentScreenRouteProp = RouteProp<RootStackParamList, 'PremiumPaymentScreen'>;
 
 const PaymentScreen: React.FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const route = useRoute<PaymentScreenRouteProp>();
   const [selectedPlan, setSelectedPlan] = useState<'yearly' | 'monthly'>('yearly');
+
+  const cameFromHomeScreen = route.params?.cameFrom === 'HomeScreen';
 
   const handlePlanSelect = (plan: 'yearly' | 'monthly') => {
     setSelectedPlan(plan);
   };
 
   const handleContinue = () => {
-    dispatch(setOnboardingCompleted());
+    console.log("Try free for 3 days button pressed");
+    // if (cameFromHomeScreen) {
+    //   navigation.navigate('Home' as never);
+    // } else {
+    //   navigation.navigate('Home' as never);
+    // }
   };
 
   const handleClose = () => {
-    navigation.navigate('Home' as never);
+    if (cameFromHomeScreen) {
+      navigation.goBack();
+    } else {
+      dispatch(setOnboardingCompleted());
+    }
   };
 
   return (
@@ -145,7 +160,7 @@ const PaymentScreen: React.FC = () => {
             </View>
             
             <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
-              <Text style={styles.continueText}>Continue</Text>
+              <Text style={styles.continueText}>Try free for 3 days</Text>
             </TouchableOpacity>
             
             <View style={styles.legalContainer}>
