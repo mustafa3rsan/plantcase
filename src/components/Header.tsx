@@ -10,7 +10,6 @@ const Header: React.FC = () => {
     <ImageBackground 
       source={require('../../assets/figma/maskgroup.png')}
       style={styles.backgroundImage}
-      imageStyle={styles.imageStyle}
     >
       <View style={styles.container}>
         <View style={styles.titleContainer}>
@@ -32,8 +31,6 @@ const Header: React.FC = () => {
 const styles = StyleSheet.create({
   backgroundImage: {
     width: '100%',
-  },
-  imageStyle: {
   },
   container: {
     backgroundColor: 'transparent',

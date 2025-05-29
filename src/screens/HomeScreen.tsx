@@ -200,19 +200,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignItems: 'center',
   },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-    backgroundColor: '#F8F9FA',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333333',
-  },
   premiumBox: {
     flexDirection: 'row',
     backgroundColor: '#24201A',

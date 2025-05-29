@@ -23,11 +23,6 @@ const PaymentScreen: React.FC = () => {
 
   const handleContinue = () => {
     console.log("Try free for 3 days button pressed");
-    // if (cameFromHomeScreen) {
-    //   navigation.navigate('Home' as never);
-    // } else {
-    //   navigation.navigate('Home' as never);
-    // }
   };
 
   const handleClose = () => {

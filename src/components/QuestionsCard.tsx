@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   },
   cardImage: { // ImageBackground içindeki asıl resme uygulanacak stil
     resizeMode: 'cover', // Resmin tamamını kaplayıp taşan kısımları keser, genellikle daha iyi görünür
-    // borderRadius: 12, // ImageBackground'da overflow: 'hidden' olduğu için genellikle gerekmez
   },
   titleText: {
     fontFamily: 'Rubik', 

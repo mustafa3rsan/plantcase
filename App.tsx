@@ -11,13 +11,16 @@ import {
   Rubik_700Bold 
 } from '@expo-google-fonts/rubik';
 
+// Ana uygulama bileşeni
 export default function App() {
+  // Google Fonts'tan Rubik font ailesi yükleniyor
   const [fontsLoaded] = useFonts({
     'Rubik-Regular': Rubik_400Regular,
     'Rubik-Medium': Rubik_500Medium,
     'Rubik-Bold': Rubik_700Bold,
   });
 
+  // Fontlar yüklenene kadar loading gösterimi
   if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -26,6 +29,7 @@ export default function App() {
     );
   }
 
+  // Redux store ve persist gate ile uygulama sarmalanıyor
   return (
     <Provider store={store}>
       <PersistGate 
