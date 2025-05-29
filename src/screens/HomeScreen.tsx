@@ -1,35 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
-import { setLoading, setData, setError } from '../store/slices/apiSlice';
+import {
+  setQuestionsLoading,
+  setQuestions,
+  setQuestionsError,
+  Question
+} from '../store/slices/apiSlice';
 import TabBar from '../components/TabBar';
 import Header from '../components/Header';
+import QuestionsCard from '../components/QuestionsCard';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state: RootState) => state.api);
+  const { questions, questionsLoading, questionsError } = useSelector((state: RootState) => state.api);
   const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchQuestionsData();
+  }, [dispatch]);
 
-  const fetchData = async () => {
+  const fetchQuestionsData = async () => {
     try {
-      dispatch(setLoading(true));
-      // Gerçek API endpoint'i buraya eklenecek
-      // const response = await fetch('YOUR_API_ENDPOINT');
-      // const data = await response.json();
-      
-      setTimeout(() => {
-        dispatch(setData({
-          message: 'Ana ekrana hoş geldiniz!',
-          items: ['Öğe 1', 'Öğe 2', 'Öğe 3'],
-        }));
-      }, 1000);
-    } catch (error) {
-      dispatch(setError('Veri yüklenirken hata oluştu'));
+      dispatch(setQuestionsLoading(true));
+      const response = await fetch('https://dummy-api-jtg6bessta-ey.a.run.app/getQuestions');
+      if (!response.ok) {
+        throw new Error('API yanıtı başarılı değil: ' + response.status);
+      }
+      const questionsData: Question[] = await response.json();
+      dispatch(setQuestions(questionsData));
+    } catch (error: any) {
+      dispatch(setQuestionsError(error.message || 'Soru verileri yüklenirken bir hata oluştu'));
     }
   };
 
@@ -37,7 +39,7 @@ const HomeScreen: React.FC = () => {
     setActiveTab(tab);
   };
 
-  if (loading) {
+  if (questionsLoading && !questions) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
@@ -46,10 +48,10 @@ const HomeScreen: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (questionsError && !questions) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>{error}</Text>
+        <Text style={styles.errorText}>{questionsError}</Text>
       </View>
     );
   }
@@ -58,10 +60,8 @@ const HomeScreen: React.FC = () => {
     <View style={styles.container}>
       <Header />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {/* Premium Box Section */}
         <View style={styles.premiumBox}>
           <View style={styles.premiumBoxIconContainer}>
-            {/* Placeholder for the main premium icon */}
             <Image source={require('../../assets/icons/Icon.png')} style={styles.premiumBoxIcon} />
           </View>
           <View style={styles.premiumBoxTextContainer}>
@@ -69,26 +69,36 @@ const HomeScreen: React.FC = () => {
             <Text style={styles.premiumBoxSubtitle}>Tap to upgrade your account!</Text>
           </View>
           <View style={styles.premiumBoxArrowContainer}>
-            {/* Placeholder for the arrow icon */}
             <Image source={require('../../assets/icons/Layer 2.png')} style={styles.premiumBoxArrowIcon} />
           </View>
         </View>
 
-        <View style={styles.header}>
-          <Text style={styles.title}>Ana Ekran</Text>
-     
-        </View>
-        
-        <View style={styles.content}>
-          {data && (
-            <>
-              <Text style={styles.message}>{data.message}</Text>
-              {data.items && data.items.map((item: string, index: number) => (
-                <View key={index} style={styles.item}>
-                  <Text style={styles.itemText}>{item}</Text>
-                </View>
-              ))}
-            </>
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Get Started</Text>
+          {questionsLoading && questions && (
+            <View style={styles.centerContainerSmall}>
+              <ActivityIndicator size="small" color="#007AFF" />
+            </View>
+          )}
+          {questionsError && (
+            <View style={styles.centerContainerSmall}>
+              <Text style={styles.errorTextSmall}>{questionsError}</Text>
+            </View>
+          )}
+          {questions && questions.length > 0 && (
+            <FlatList
+              horizontal
+              data={questions}
+              renderItem={({ item }) => (
+                <QuestionsCard title={item.title} image_uri={item.image_uri} />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.questionsList}
+            />
+          )}
+          {questions && questions.length === 0 && !questionsLoading && !questionsError && (
+            <Text style={styles.noDataText}>Gösterilecek soru bulunamadı.</Text>
           )}
         </View>
       </ScrollView>
@@ -107,93 +117,86 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 120, // TabBar için alan bırak
+    paddingBottom: 120,
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
+    padding: 20,
+  },
+  centerContainerSmall: {
+    paddingVertical: 20,
+    alignItems: 'center',
   },
   header: {
-    padding: 20,
-    paddingTop: 60, // Adjusted paddingTop for better spacing if Header is transparent or minimal
-    backgroundColor: '#F8F9FA', // Light grey background for the header section
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+    backgroundColor: '#F8F9FA',
     borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0', // Subtle border for separation
+    borderBottomColor: '#E0E0E0',
   },
   title: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 8,
   },
-  // Premium Box Styles
   premiumBox: {
     flexDirection: 'row',
-    backgroundColor: '#24201A', // Dark background from Figma
+    backgroundColor: '#24201A',
     padding: 15,
     marginHorizontal: 20,
     marginTop: 20,
     borderRadius: 12,
     alignItems: 'center',
-    elevation: 3, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
+    elevation: 3,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   premiumBoxIconContainer: {
     marginRight: 15,
-    // Placeholder style for icon
-    // padding: 5, // Keep padding if needed for background around icon
-    // backgroundColor: '#D0B070', // This was for the text background, might not be needed for an image
     borderRadius: 8,
-    alignItems: 'center', // Center the icon if container is larger
-    justifyContent: 'center', // Center the icon if container is larger
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   premiumBoxIcon: {
-    width: 50, // Specify width for the icon
-    height: 50, // Specify height for the icon
-    resizeMode: 'contain', // Adjust resizeMode as needed
-    alignItems: 'center', // Center the icon if container is larger
-    justifyContent: 'center', // Center the icon if container is larger
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   premiumBoxTextContainer: {
     flex: 1,
   },
   premiumBoxTitle: {
     fontSize: 16,
-    fontWeight: '600', // Semibold
-    color: '#E5C990', // Gold-like color from Figma (approximate)
+    fontWeight: '600',
+    color: '#E5C990',
     marginBottom: 4,
   },
   premiumBoxSubtitle: {
     fontSize: 13,
-    color: '#FFDE9C', // Lighter gold-like color (approximate)
+    color: '#FFDE9C',
   },
   premiumBoxArrowContainer: {
     marginLeft: 10,
-    alignItems: 'center', // Center the icon if container is larger
-    justifyContent: 'center', // Center the icon if container is larger
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   premiumBoxArrowIcon: {
-    width: 24, // Specify width for the arrow icon
-    height: 24, // Specify height for the arrow icon
+    width: 24,
+    height: 24,
     resizeMode: 'contain',
-  },
-  content: {
-    padding: 20,
-  },
-  message: {
-    fontSize: 18,
-    color: '#333333',
-    marginBottom: 20,
-    textAlign: 'center',
   },
   item: {
     backgroundColor: '#F0F0F0',
     padding: 15,
+    marginHorizontal: 20,
     marginBottom: 10,
     borderRadius: 8,
   },
@@ -206,12 +209,42 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666666',
   },
+  loadingTextSmall: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#666666',
+  },
   errorText: {
     fontSize: 16,
     color: '#FF3B30',
     textAlign: 'center',
+  },
+  errorTextSmall: {
+    fontSize: 14,
+    color: '#FF3B30',
+    textAlign: 'center',
+  },
+  sectionContainer: {
+    marginTop: 20,
+    paddingHorizontal: 0,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 10,
     paddingHorizontal: 20,
   },
+  questionsList: {
+    paddingHorizontal: 10,
+  },
+  noDataText: {
+    textAlign: 'center',
+    fontSize: 15,
+    color: '#888',
+    marginTop: 15,
+    paddingHorizontal: 20,
+  }
 });
 
 export default HomeScreen; 

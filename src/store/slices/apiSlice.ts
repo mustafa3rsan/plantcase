@@ -1,50 +1,63 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+// Yeni Interface'ler
+export interface Question {
+  id: number;
+  title: string;
+  subtitle: string;
+  image_uri: string;
+  uri: string;
+  order: number;
+}
+
+// Kategori interface'i (şimdilik kullanılmıyor ama gelecekte eklenebilir)
+// export interface Category {
+//   id: string;
+//   name: string;
+//   // ... diğer alanlar
+// }
+
 interface ApiState {
-  loading: boolean;
-  data: any | null;
-  error: string | null;
+  questionsLoading: boolean;
+  questions: Question[] | null;
+  questionsError: string | null;
 }
 
 const initialState: ApiState = {
-  loading: false,
-  data: null,
-  error: null,
+  questionsLoading: false,
+  questions: null,
+  questionsError: null,
 };
 
 const apiSlice = createSlice({
   name: 'api',
   initialState,
   reducers: {
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setData: (state, action: PayloadAction<any>) => {
-      state.data = action.payload;
-      state.loading = false;
-      state.error = null;
-    },
-    setError: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.loading = false;
-    },
-    clearError: (state) => {
-      state.error = null;
-    },
     resetApi: (state) => {
-      state.loading = false;
-      state.data = null;
-      state.error = null;
+      state.questionsLoading = false;
+      state.questions = null;
+      state.questionsError = null;
+    },
+    setQuestionsLoading: (state, action: PayloadAction<boolean>) => {
+      state.questionsLoading = action.payload;
+    },
+    setQuestions: (state, action: PayloadAction<Question[]>) => {
+      state.questions = action.payload;
+      state.questionsLoading = false;
+      state.questionsError = null;
+    },
+    setQuestionsError: (state, action: PayloadAction<string>) => {
+      state.questionsError = action.payload;
+      state.questionsLoading = false;
     },
   },
 });
 
 export const {
-  setLoading,
-  setData,
-  setError,
-  clearError,
   resetApi,
+  setQuestionsLoading,
+  setQuestions,
+  setQuestionsError,
 } = apiSlice.actions;
 
 export default apiSlice.reducer; 
