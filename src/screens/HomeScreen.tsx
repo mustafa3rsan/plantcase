@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import { setLoading, setData, setError } from '../store/slices/apiSlice';
 import TabBar from '../components/TabBar';
+import Header from '../components/Header';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <Header />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Text style={styles.title}>Ana Ekran</Text>
