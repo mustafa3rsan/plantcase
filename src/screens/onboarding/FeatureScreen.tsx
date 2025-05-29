@@ -49,7 +49,7 @@ const FeatureScreen: React.FC = () => {
             resizeMode="contain"
           />
           <Image 
-            source={require('../../../assets/figma/Scan_1_563.png')}
+            source={require('../../../assets/figma/cameraline.png')}
             style={styles.scanImage}
             resizeMode="contain"
           />
