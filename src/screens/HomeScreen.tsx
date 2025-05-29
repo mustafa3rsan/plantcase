@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
 import { setLoading, setData, setError } from '../store/slices/apiSlice';
@@ -58,9 +58,25 @@ const HomeScreen: React.FC = () => {
     <View style={styles.container}>
       <Header />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        {/* Premium Box Section */}
+        <View style={styles.premiumBox}>
+          <View style={styles.premiumBoxIconContainer}>
+            {/* Placeholder for the main premium icon */}
+            <Image source={require('../../assets/icons/Icon.png')} style={styles.premiumBoxIcon} />
+          </View>
+          <View style={styles.premiumBoxTextContainer}>
+            <Text style={styles.premiumBoxTitle}>FREE Premium Available</Text>
+            <Text style={styles.premiumBoxSubtitle}>Tap to upgrade your account!</Text>
+          </View>
+          <View style={styles.premiumBoxArrowContainer}>
+            {/* Placeholder for the arrow icon */}
+            <Image source={require('../../assets/icons/Layer 2.png')} style={styles.premiumBoxArrowIcon} />
+          </View>
+        </View>
+
         <View style={styles.header}>
           <Text style={styles.title}>Ana Ekran</Text>
-          <Text style={styles.subtitle}>Onboarding tamamlandı!</Text>
+     
         </View>
         
         <View style={styles.content}>
@@ -101,8 +117,10 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 20,
-    paddingTop: 60,
-    backgroundColor: '#F8F9FA',
+    paddingTop: 60, // Adjusted paddingTop for better spacing if Header is transparent or minimal
+    backgroundColor: '#F8F9FA', // Light grey background for the header section
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0', // Subtle border for separation
   },
   title: {
     fontSize: 28,
@@ -110,9 +128,59 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 8,
   },
-  subtitle: {
+  // Premium Box Styles
+  premiumBox: {
+    flexDirection: 'row',
+    backgroundColor: '#24201A', // Dark background from Figma
+    padding: 15,
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    elevation: 3, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  premiumBoxIconContainer: {
+    marginRight: 15,
+    // Placeholder style for icon
+    // padding: 5, // Keep padding if needed for background around icon
+    // backgroundColor: '#D0B070', // This was for the text background, might not be needed for an image
+    borderRadius: 8,
+    alignItems: 'center', // Center the icon if container is larger
+    justifyContent: 'center', // Center the icon if container is larger
+  },
+  premiumBoxIcon: {
+    width: 50, // Specify width for the icon
+    height: 50, // Specify height for the icon
+    resizeMode: 'contain', // Adjust resizeMode as needed
+    alignItems: 'center', // Center the icon if container is larger
+    justifyContent: 'center', // Center the icon if container is larger
+  },
+  premiumBoxTextContainer: {
+    flex: 1,
+  },
+  premiumBoxTitle: {
     fontSize: 16,
-    color: '#666666',
+    fontWeight: '600', // Semibold
+    color: '#E5C990', // Gold-like color from Figma (approximate)
+    marginBottom: 4,
+  },
+  premiumBoxSubtitle: {
+    fontSize: 13,
+    color: '#FFDE9C', // Lighter gold-like color (approximate)
+  },
+  premiumBoxArrowContainer: {
+    marginLeft: 10,
+    alignItems: 'center', // Center the icon if container is larger
+    justifyContent: 'center', // Center the icon if container is larger
+  },
+  premiumBoxArrowIcon: {
+    width: 24, // Specify width for the arrow icon
+    height: 24, // Specify height for the arrow icon
+    resizeMode: 'contain',
   },
   content: {
     padding: 20,
