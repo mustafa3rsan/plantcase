@@ -15,10 +15,10 @@ const FeatureScreen: React.FC = () => {
   return (
     <ImageBackground 
       source={require('../../../assets/Background.png')}
-      style={styles.container}
+      style={{flex: 1}}
       resizeMode="cover"
     >
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView style={{flex: 1}}>
         <View style={styles.topContentContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>
@@ -33,11 +33,7 @@ const FeatureScreen: React.FC = () => {
         </View>
 
         <View style={styles.imageContentContainer}>
-          <Image 
-            source={require('../../../assets/figma/Shadow_1_560.svg')}
-            style={styles.shadowImage}
-            resizeMode="contain" 
-          />
+         
           <Image 
             source={require('../../../assets/figma/Plant_1_561.png')}
             style={styles.plantImage}
@@ -60,7 +56,6 @@ const FeatureScreen: React.FC = () => {
           <Button 
             title="Continue"
             onPress={handleNext}
-            style={styles.button}
           />
                 <View style={styles.sliderContainer}>
             <View style={[styles.sliderDot, styles.sliderDotActive]} />
@@ -74,13 +69,6 @@ const FeatureScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FDFFFE',
-  },
-  safeArea: {
-    flex: 1,
-  },
   topContentContainer: {
     alignItems: 'center',
     marginTop: 59,
@@ -146,14 +134,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 22,
     transform: [{ scale: 1.10 }],
-  },
-  shadowImage: {
-    width: 214,
-    height: 12,
-    position: 'absolute',
-    left: 80,
-    top: 451,
-    transform: [{ scale: 1.10 }],
+ 
   },
   bottomContainer: {
     paddingHorizontal: 24,
@@ -183,14 +164,7 @@ const styles = StyleSheet.create({
   sliderDotInactive: {
     backgroundColor: 'rgba(19, 35, 27, 0.25)',
   },
-  button: {
-    backgroundColor: '#28AF6E',
-    borderRadius: 12,
-    height: 56,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  
 });
 
 export default FeatureScreen; 

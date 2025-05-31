@@ -37,8 +37,7 @@ const StepsScreen: React.FC = () => {
           style={styles.objectImage} 
         />
 
-        <View style={styles.phoneContainer}>
-          <View style={styles.phoneOverlay} />
+        <View style={styles.phoneContainer}>       
           <Image
             source={require('../../../assets/figma/flatphone.png')}
             style={styles.phoneImage}
@@ -57,7 +56,7 @@ const StepsScreen: React.FC = () => {
           <Button
             title="Continue"
             onPress={handleNext}
-            style={styles.button}
+           
           />
           <View style={styles.sliderContainer}>
             <View style={[styles.sliderDot, styles.sliderDotInactive]} />
@@ -131,15 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  phoneOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    zIndex: 1,
-  },
+
   phoneImage: {
     width: 261,
     height: 540,
@@ -163,14 +154,6 @@ const styles = StyleSheet.create({
     paddingBottom: 34,
     alignItems: 'center',
     zIndex: 2,
-  },
-  button: {
-    backgroundColor: '#28AF6E',
-    borderRadius: 12,
-    height: 56,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   sliderContainer: {
     flexDirection: 'row',

@@ -21,9 +21,11 @@ const WelcomeScreen: React.FC = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.content}>
           <View style={styles.textContainer}>
+
             <Text style={styles.title}>
               Welcome to <Text style={styles.boldText}>PlantApp</Text>
             </Text>
+            
             <Text style={styles.subtitle}>
               Identify more than 3000+ plants and {'\n'}88% accuracy.
             </Text>
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   content: {
-    flex: 1,
+    flex:1,
     justifyContent: 'flex-start',
   },
   textContainer: {

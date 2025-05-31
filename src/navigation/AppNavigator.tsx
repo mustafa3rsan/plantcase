@@ -7,7 +7,7 @@ import { RootState } from '../store/store';
 // Screens
 import OnboardingNavigator from './OnboardingNavigator';
 import HomeScreen from '../screens/HomeScreen';
-import PaymentScreen from '../screens/onboarding/PaymentScreen';
+import PaymentScreen from '../screens/onboarding/PaymentScreen/PaymentScreen';
 
 const Stack = createStackNavigator();
 
