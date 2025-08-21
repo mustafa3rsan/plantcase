@@ -9,8 +9,14 @@ interface ButtonProps {
 }
 
 export const Button = ({ title, onPress, style, textStyle }: ButtonProps) => {
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+  };
+
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={handlePress}>
       <Text style={[styles.text, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
@@ -26,8 +32,6 @@ const styles = StyleSheet.create({
     height: 56,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
   },
   text: {
     color: '#FFFFFF',
@@ -35,6 +39,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: -0.24,
     textAlign: 'center',
-    fontFamily: 'SF Pro Text',
   },
-}); 
+});
